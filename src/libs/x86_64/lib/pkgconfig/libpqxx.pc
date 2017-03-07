@@ -1,0 +1,10 @@
+prefix=/home/minphone/github-linux/program-train/pt-master/program-train/src/libs/x86_64
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libpqxx
+Description: a C++ API to the PostgreSQL database management system.
+Version: 4.0
+Libs: -L${libdir} -L/usr/lib -lpqxx
+Cflags: -I${includedir} -I/usr/include/postgresql
