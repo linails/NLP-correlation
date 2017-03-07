@@ -1,6 +1,6 @@
 # readme.txt
 # Created Time: 2016-04-23 14:20:56
-# Last modified: 2017-03-07 21:55:31
+# Last modified: 2017-03-07 22:32:02
 #
 cmake_minimum_required(VERSION 2.8)
 
@@ -18,6 +18,21 @@ include_directories(
 set(SRC_LIST
    main.cpp 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   srcs/alpha-bet.cpp
+   srcs/denoise.cpp
+   srcs/dic-parser.cpp
+   srcs/disk-dic.cpp
+   srcs/format-later-stage.cpp
+   srcs/format-parser.cpp
+   srcs/formatParsing.cpp
+   srcs/python-module.cpp
+   srcs/regex_common.cpp
+   srcs/rfileoprt.cpp
+   srcs/rwfileoprt.cpp
+   srcs/segmentation.cpp
+   srcs/statistics.cpp
+   srcs/stringTools.cpp
+   srcs/timer.cpp
 )
 
 add_executable(nlp-correlation ${SRC_LIST})
