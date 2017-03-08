@@ -1,6 +1,6 @@
 # readme.txt
 # Created Time: 2016-04-23 14:20:56
-# Last modified: 2017-03-07 22:32:02
+# Last modified: 2017-03-08 22:57:30
 #
 cmake_minimum_required(VERSION 2.8)
 
@@ -33,6 +33,7 @@ set(SRC_LIST
    srcs/statistics.cpp
    srcs/stringTools.cpp
    srcs/timer.cpp
+   srcs/connection.cpp
 )
 
 add_executable(nlp-correlation ${SRC_LIST})
