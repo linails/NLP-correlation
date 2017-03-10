@@ -1,12 +1,11 @@
 /*
  * Progarm Name: format-later-stage.cpp
  * Created Time: 2017-03-04 08:34:13
- * Last modified: 2017-03-10 22:56:53
+ * Last modified: 2017-03-10 23:19:52
  * @author: minphone.linails linails@foxmail.com 
  */
 
 #include "format-later-stage.hpp"
-#include "denoise.hpp"
 #include <iostream>
 #include "dic-parser.hpp"
 #include "stringTools.h"
@@ -23,16 +22,19 @@ FormatLaterStage::FormatLaterStage()
 
 FormatLaterStage::~FormatLaterStage()
 {
+    if(nullptr != this->m_denoise){
+        delete this->m_denoise;
+        this->m_denoise = nullptr;
+    }
 }
 
 int  FormatLaterStage::calc_statis_for_spell(void)
 {
     int ret = 0;
 
-    map<string, float>  ret_statis;    // <'p', 0.243>,<'a', 0.534> ...
-    this->m_statis.get_statis(ret_statis);
+    this->m_statis.get_statis(this->m_ret_statis);
 
-    for(auto &u : ret_statis){
+    for(auto &u : this->m_ret_statis){
         printf("(%s - %f)\n", u.first.c_str(), u.second);
     }
 
@@ -45,8 +47,18 @@ int  FormatLaterStage::pre_stage_spell_filter(string &line)
 {
     if(-1 != m_statis_calc_flag){
 
-        float threshold = 0.000092;
-        string except("IOếềÁňŌĔĒaÀÉĀÈRαPǘKNF");
+        if(nullptr == this->m_denoise){
+            float threshold = 0.000092;
+            string except("IOếềÁňŌĔĒaÀÉĀÈRαPǘKNF");
+
+            this->m_denoise = new DeNoise(threshold, this->m_ret_statis, except);
+            if(nullptr == this->m_denoise){
+                cout << "[Error] new DeNoise failed !" << endl;
+                exit(1);
+            }
+        }
+
+        this->m_denoise->denoise(line);
 
     }else{
         stringTools     st;
