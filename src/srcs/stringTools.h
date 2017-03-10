@@ -1,7 +1,7 @@
 /*
  * Progarm Name: stringTools.h
  * Created Time: 2016-05-26 19:47:33
- * Last modified: 2017-03-03 23:40:01
+ * Last modified: 2017-03-10 22:17:38
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -62,6 +62,27 @@ public:
      * */
     int  incomplete_pair_check(vector<pair<string, int> > &result, string &s, const char *pairs = nullptr);
     int  incomplete_pair_del(string &s, const char *pairs = nullptr);
+    /*
+     * pair eg. "[]" / "()"
+     *
+     * return eg."[unit]"
+     *            ^    ^
+     *            |    |
+     * Index: < first,last >
+     *
+     * Failed : pos = <-1, -1>
+     * */
+    int  unit_in_block_check(pair<int, int> &pos, string &unit, string &oristr, const char *spair);
+    /* 
+     * unit : str
+     *
+     * return eg."strxxxxstr"
+     *            ^        ^
+     *            |        |
+     * Index: < first , last >
+     * Failed : pos = <-1, -1>
+     * */
+    int  block_check(pair<int, int> &pos, string &oristr, string &unit);
 private:
     int  get_pattern_mode(const char *pattern);
     int  get_subpatterns(const char *pattern);

@@ -1,7 +1,7 @@
 /*
  * Progarm Name: formatParsing.cpp
  * Created Time: 2016-05-15 12:14:11
- * Last modified: 2017-03-04 00:32:21
+ * Last modified: 2017-03-10 22:19:05
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -414,29 +414,7 @@ int  formatTool::get_wordcell(WordCell_t &wc)
  * */
 int  formatTool::unit_in_block_check(pair<int, int> &pos, string &unit, string &oristr, const char *spair)
 {
-    int ret = -1;
-
-    /* init pos */
-    pos.first = -1;
-    pos.second= -1;
-
-    stringTools st;
-    if(2 == st.utf_count(spair)){
-        string finder;
-        vector<string> spair_utf;
-        st.split_utf_code(spair_utf, spair);
-
-        finder += spair_utf[0];
-        finder += unit;
-        finder += spair_utf[1];
-
-        if((int)string::npos != (pos.first = oristr.find(finder))){
-            pos.second= pos.first + finder.size();
-            ret = 0;
-        }
-    }
-
-    return ret;
+    stringTools st; return st.unit_in_block_check(pos, unit, oristr, spair);
 }
 
 /* 
@@ -450,21 +428,6 @@ int  formatTool::unit_in_block_check(pair<int, int> &pos, string &unit, string &
  * */
 int  formatTool::block_check(pair<int, int> &pos, string &oristr, string &unit)
 {
-    int ret = -1;
-
-    /* init pos */
-    pos.first = -1;
-    pos.second= -1;
-
-    if((int)string::npos != (pos.first = oristr.find(unit))){
-        if(0 == pos.first){
-            if((int)string::npos != (pos.second = oristr.find(unit, unit.length()))){
-                pos.second += unit.length();
-                ret = 0;
-            }
-        }
-    }
-
-    return ret;
+    stringTools st; return st.block_check(pos, oristr, unit);
 }
 

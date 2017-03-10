@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.cpp
  * Created Time: 2016-12-15 22:09:28
- * Last modified: 2017-03-07 15:29:25
+ * Last modified: 2017-03-10 22:55:24
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -525,8 +525,9 @@ int  DicParser::later_stage_spell(int argc, char **argv)
 {
     cout << "later - stage For spell !" << endl;
 
-    int ret = 0;
+    int ret   = 0;
     string fn = "/home/minphone/share/exOrigin/log-spell-2";
+    FormatLaterStage fls;
 
     if(1 != argc){
         fn = string(argv[1]);
@@ -538,13 +539,19 @@ int  DicParser::later_stage_spell(int argc, char **argv)
     rFileOprt fo(fn);
     timer.timing();
 
-    auto parser = [](string line){
-        cout << "line = " << line << endl;
-    };
+    auto parser  = [&fls](string line){ fls.pre_stage_spell_filter(line); };
 
     string dline;
     //ret = fo.read_linebyline(parser);
-    ret = fo.read_index_line(1000, dline, parser);
+    ret = fo.read_index_line(64057, dline, parser);
+    ret = fo.read_index_line(64513, dline, parser);
+    ret = fo.read_index_line(64514, dline, parser);
+
+    fls.calc_statis_for_spell();
+    //ret = fo.read_linebyline(parser);
+    ret = fo.read_index_line(64057, dline, parser);
+    ret = fo.read_index_line(64513, dline, parser);
+    ret = fo.read_index_line(64514, dline, parser);
 
     return ret;
 }

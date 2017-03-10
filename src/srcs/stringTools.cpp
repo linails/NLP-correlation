@@ -1,7 +1,7 @@
 /*
  * Progarm Name: stringTools.cpp
  * Created Time: 2016-05-26 19:47:27
- * Last modified: 2017-03-03 23:40:27
+ * Last modified: 2017-03-10 22:17:22
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -717,6 +717,72 @@ int  stringTools::incomplete_pair_del(string &s, const char *pairs)
 #endif
 
     return 0;
+}
+
+/*
+ * pair eg. "[]" / "()"
+ *
+ * return eg."[unit]"
+ *            ^    ^
+ *            |    |
+ * Index: < first,last >
+ *
+ * Failed : pos = <-1, -1>
+ * */
+int  stringTools::unit_in_block_check(pair<int, int> &pos, string &unit, string &oristr, const char *spair)
+{
+    int ret = -1;
+
+    /* init pos */
+    pos.first = -1;
+    pos.second= -1;
+
+    stringTools st;
+    if(2 == st.utf_count(spair)){
+        string finder;
+        vector<string> spair_utf;
+        st.split_utf_code(spair_utf, spair);
+
+        finder += spair_utf[0];
+        finder += unit;
+        finder += spair_utf[1];
+
+        if((int)string::npos != (pos.first = oristr.find(finder))){
+            pos.second= pos.first + finder.size();
+            ret = 0;
+        }
+    }
+
+    return ret;
+}
+
+/* 
+ * unit : str
+ *
+ * return eg."strxxxxstr"
+ *            ^        ^
+ *            |        |
+ * Index: < first , last >
+ * Failed : pos = <-1, -1>
+ * */
+int  stringTools::block_check(pair<int, int> &pos, string &oristr, string &unit)
+{
+    int ret = -1;
+
+    /* init pos */
+    pos.first = -1;
+    pos.second= -1;
+
+    if((int)string::npos != (pos.first = oristr.find(unit))){
+        if(0 == pos.first){
+            if((int)string::npos != (pos.second = oristr.find(unit, unit.length()))){
+                pos.second += unit.length();
+                ret = 0;
+            }
+        }
+    }
+
+    return ret;
 }
 
 /*success return pattern mode >= 0
