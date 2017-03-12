@@ -1,7 +1,7 @@
 /*
  * Progarm Name: denoise.hpp
  * Created Time: 2017-03-03 23:51:20
- * Last modified: 2017-03-10 23:19:32
+ * Last modified: 2017-03-12 19:40:02
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -11,10 +11,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 
 using std::string;
 using std::vector;
 using std::map;
+using std::list;
 
 class DeNoise{
 public:
@@ -22,9 +24,13 @@ public:
     ~DeNoise();
     int  denoise(string &line);
 private:
-    int     m_threshold;
+    int  clear_head_noise(list<string> &split);
+    int  filter_char_check(string char_);
+    int  is_middle(list<string> &split, const char *char_ = nullptr);
+private:
+    float               m_threshold;
     map<string, float>  m_ret_statis;    // <'p', 0.243>,<'a', 0.534> ...
-    string  m_except;
+    string              m_except;
 };
 
 #endif //_DENOISE_HPP_

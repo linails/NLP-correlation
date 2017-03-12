@@ -1,7 +1,7 @@
 /*
  * Progarm Name: format-later-stage.cpp
  * Created Time: 2017-03-04 08:34:13
- * Last modified: 2017-03-10 23:19:52
+ * Last modified: 2017-03-12 14:31:44
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -45,42 +45,43 @@ int  FormatLaterStage::calc_statis_for_spell(void)
 
 int  FormatLaterStage::pre_stage_spell_filter(string &line)
 {
-    if(-1 != m_statis_calc_flag){
+    stringTools     st;
+    vector<string>  result;
+    int             pos = -1;
 
-        if(nullptr == this->m_denoise){
-            float threshold = 0.000092;
-            string except("IOếềÁňŌĔĒaÀÉĀÈRαPǘKNF");
+    if((int)string::npos != (pos = line.find("spel : "))){
 
-            this->m_denoise = new DeNoise(threshold, this->m_ret_statis, except);
-            if(nullptr == this->m_denoise){
-                cout << "[Error] new DeNoise failed !" << endl;
-                exit(1);
+        string sline(line, pos + strlen("spel : "), string::npos);
+        if(false == sline.empty()){
+
+            if(string::npos != sline.find("[")) st.filter("[", sline, 1);
+            if(string::npos != sline.find("]")) st.filter("]", sline, 1);
+
+            st.filter("',°—“”•②③④⑤⑥⑦⑧⑩　１］", sline);
+
+            st.split_utf_code(result, sline);
+
+            for(auto &s : result){ this->m_statis.increase(s); }
+
+            if(-1 != m_statis_calc_flag){
+
+                if(nullptr == this->m_denoise){
+                    float threshold = 0.000092;
+                    string except("IOếềÁňŌĔĒaÀÉĀÈRαPǘKNF");
+
+                    this->m_denoise = new DeNoise(threshold, this->m_ret_statis, except);
+                    if(nullptr == this->m_denoise){
+                        cout << "[Error] new DeNoise failed !" << endl;
+                        exit(1);
+                    }
+                }
+
+                this->m_denoise->denoise(sline);
+
+                cout << "DeNoise ..." << endl;
             }
-        }
 
-        this->m_denoise->denoise(line);
-
-    }else{
-        stringTools     st;
-        vector<string>  result;
-        int             pos = -1;
-
-        if((int)string::npos != (pos = line.find("spel : "))){
-
-            string sline(line, pos + strlen("spel : "), string::npos);
-            if(false == sline.empty()){
-
-                if(string::npos != sline.find("[")) st.filter("[", sline, 1);
-                if(string::npos != sline.find("]")) st.filter("]", sline, 1);
-
-                st.filter("',°—“”•②③④⑤⑥⑦⑧⑩　１］", sline);
-
-                st.split_utf_code(result, sline);
-
-                for(auto &s : result){ this->m_statis.increase(s); }
-
-                cout << "sline : " << sline << endl;
-            }
+            cout << "sline : " << sline << endl;
         }
     }
 

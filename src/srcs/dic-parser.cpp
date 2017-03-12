@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.cpp
  * Created Time: 2016-12-15 22:09:28
- * Last modified: 2017-03-10 22:55:24
+ * Last modified: 2017-03-12 23:07:27
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -542,16 +542,21 @@ int  DicParser::later_stage_spell(int argc, char **argv)
     auto parser  = [&fls](string line){ fls.pre_stage_spell_filter(line); };
 
     string dline;
-    //ret = fo.read_linebyline(parser);
-    ret = fo.read_index_line(64057, dline, parser);
-    ret = fo.read_index_line(64513, dline, parser);
-    ret = fo.read_index_line(64514, dline, parser);
+    ret = fo.read_linebyline(parser);
+    //ret = fo.read_index_line(64057, dline, parser);
+    //ret = fo.read_index_line(64513, dline, parser);
+    //ret = fo.read_index_line(64514, dline, parser);
 
     fls.calc_statis_for_spell();
-    //ret = fo.read_linebyline(parser);
-    ret = fo.read_index_line(64057, dline, parser);
-    ret = fo.read_index_line(64513, dline, parser);
-    ret = fo.read_index_line(64514, dline, parser);
+    ret = fo.read_linebyline(parser);
+    #if 0
+    ret = fo.read_index_line(7108, dline, parser);
+    //ret = fo.read_index_line(10182, dline, parser);
+    //ret = fo.read_index_line(63666 + 388 + 3, dline, parser);
+    //ret = fo.read_index_line(64057, dline, parser);
+    //ret = fo.read_index_line(64513, dline, parser);
+    //ret = fo.read_index_line(64514, dline, parser);
+    #endif
 
     return ret;
 }
