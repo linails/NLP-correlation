@@ -1,7 +1,7 @@
 /*
  * Progarm Name: disk-dic.hpp
  * Created Time: 2017-02-27 15:35:40
- * Last modified: 2017-03-03 15:31:42
+ * Last modified: 2017-03-13 18:48:10
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -52,6 +52,7 @@ public:
     int  insert_wc_word_mean_source(WordChars_t &wc);
     int  insert_wc_word_mean_source(vector<WordChars_t> &wcs);
     int  get_all_words_wc(vector<string> &words);
+    int  insert_ss_full(vector<pair<string, int> > &word_counts);
 private:
     typedef struct{ const char *tag; const char *sql; }SqlOprts_t;
     typedef map<const char *, const char *> SqlMap_t;

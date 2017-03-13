@@ -1,7 +1,7 @@
 /*
  * Progarm Name: disk-dic.cpp
  * Created Time: 2017-02-27 15:35:36
- * Last modified: 2017-03-05 21:56:46
+ * Last modified: 2017-03-13 18:51:57
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -209,6 +209,8 @@ DiskDic::SqlOprts_t DiskDic::CorpusTableOprts[] = {
 {"select-WC-mean",                      "select mean from CorpusWordChars where word='%s'"},
 {"select-WC-source",                    "select source from CorpusWordChars where word='%s'"},
 {"select-WC-remark",                    "select remark from CorpusWordChars where word='%s'"},
+{"full|insert-SS|bulk",                 "insert CorpusSpellStatis into values(?,?,?)"},
+{"part|insert-SS-word/count|bulk",      "insert into CorpusSpellStatis(word, count) values(?,?)"},
 };
 
 DiskDic::DiskDic(string db)
@@ -1199,6 +1201,86 @@ int  DiskDic::get_all_words_wc(vector<string> &words)
     }while(1);
 
     if(stmt) sqlite3_finalize(stmt);
+
+    return 0;
+}
+
+int  DiskDic::insert_ss_full(vector<pair<string, int> > &word_counts)
+{
+    sqlite3_stmt *stmt  = NULL;
+    string beginSQL     = "begin transaction";
+    string commitSQL    = "commit";
+
+    /*
+     * begin transaction
+     * */
+    if(sqlite3_prepare_v2(this->m_conn,
+                          beginSQL.c_str(),
+                          beginSQL.size(),
+                          &stmt,
+                          NULL) != SQLITE_OK){
+        if(stmt) sqlite3_finalize(stmt);
+        return -1;
+    }
+    if(sqlite3_step(stmt) != SQLITE_DONE){
+        sqlite3_finalize(stmt);
+        return -1;
+    }
+    sqlite3_finalize(stmt);
+
+
+    /* 
+     * insert data
+     * */
+    auto bulk_init = [&stmt, this](){
+        stmt = NULL;
+        if(sqlite3_prepare_v2(this->m_conn, 
+                              this->m_sqlmap["part|insert-SS-word/count|bulk"], 
+                              strlen(this->m_sqlmap["part|insert-SS-word/count|bulk"]),
+                              &stmt,
+                              NULL) != SQLITE_OK){
+            if(stmt) sqlite3_finalize(stmt);
+            return -1;
+        }else
+            return 0;
+    };
+
+    if(0 != bulk_init()) return -1;
+
+    for(auto &wc : word_counts){
+
+        sqlite3_bind_text(stmt, 1, wc.first.c_str(),  wc.first.size(), SQLITE_TRANSIENT);
+        sqlite3_bind_int(stmt,  2, wc.second);
+
+        if(sqlite3_step(stmt) != SQLITE_DONE){
+            sqlite3_finalize(stmt);
+            if(0 != bulk_init()) return -1;
+            cout << "[Error] sqlite-step failed !" << endl;
+            continue;
+        }
+
+        sqlite3_reset(stmt);
+    }
+    if(stmt) sqlite3_finalize(stmt);
+
+
+    /*
+     * commit
+     * */
+    stmt = NULL;
+    if(sqlite3_prepare_v2(this->m_conn, 
+                          commitSQL.c_str(),
+                          commitSQL.size(),
+                          &stmt,
+                          NULL) != SQLITE_OK){
+        if(stmt) sqlite3_finalize(stmt);
+        return -1;
+    }
+    if(sqlite3_step(stmt) != SQLITE_DONE){
+        sqlite3_finalize(stmt);
+        return -1;
+    }
+    sqlite3_finalize(stmt);
 
     return 0;
 }
