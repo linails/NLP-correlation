@@ -1,7 +1,7 @@
 /*
  * Progarm Name: statistics.cpp
  * Created Time: 2017-03-03 23:50:34
- * Last modified: 2017-03-06 20:45:36
+ * Last modified: 2017-03-14 11:25:30
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -88,6 +88,20 @@ int  Statistics::calc(void)
     this->m_statis_updated_flag = true;
 
     return 0;
+}
+
+int  Statistics::set_word_freq(map<string, int> &word_freq)
+{
+    this->m_word_freq.clear();
+
+    this->m_word_freq = word_freq;
+
+    return 0;
+}
+
+int  Statistics::get_word_freq(map<string, int> &word_freq)
+{
+    word_freq = this->m_word_freq; return 0;
 }
 
 

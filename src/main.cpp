@@ -1,7 +1,7 @@
 /*
  * Progarm Name: main.cpp
  * Created Time: 2017-03-07 21:53:35
- * Last modified: 2017-03-07 22:31:13
+ * Last modified: 2017-03-14 14:17:00
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -18,9 +18,16 @@ int main(int argc, char **argv)
 
     cout << "NLP-correlation ..." << endl;
 
-    DicParser dicparser;
+    DicParser *pdic = DicParser::get_instance(new DicParser());
+    if(nullptr != pdic){
+        cout << "new succeed " << endl;
+    }else{
+        cout << "[Error] new failed !" << endl;
+    }
 
-    ret = dicparser.dicparser_main(argc, argv); assert(-1 != ret);
+    ret = pdic->dicparser_main(argc, argv); assert(-1 != ret);
+
+    delete pdic;
 
     return ret;
 }

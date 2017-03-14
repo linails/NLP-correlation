@@ -1,7 +1,7 @@
 /*
  * Progarm Name: statistics.hpp
  * Created Time: 2017-03-03 23:50:41
- * Last modified: 2017-03-05 12:41:59
+ * Last modified: 2017-03-14 11:23:36
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -25,6 +25,8 @@ public:
     int  decrease(string char_);
     int  get_statis(map<string, float> &statis);
     int  clear(void);
+    int  set_word_freq(map<string, int> &word_freq);
+    int  get_word_freq(map<string, int> &word_freq);
 private:
     int  calc(void);
 private:
