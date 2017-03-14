@@ -1,6 +1,6 @@
 # readme.txt
 # Created Time: 2016-04-23 14:20:56
-# Last modified: 2017-03-09 08:55:00
+# Last modified: 2017-03-14 18:29:54
 #
 cmake_minimum_required(VERSION 2.8)
 
@@ -55,6 +55,8 @@ set(link_lib
     ${libs_path}/lib/libpqxx.a
     ${libs_path}/lib/libgtest.a
     ${libs_path}/lib/libgtest_main.a
+    ${libs_path}/lib/libtinyxml.a
+    ${libs_path}/lib/libhiredis.a
     pthread
     dl
     pq
