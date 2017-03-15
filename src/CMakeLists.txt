@@ -1,6 +1,6 @@
 # readme.txt
 # Created Time: 2016-04-23 14:20:56
-# Last modified: 2017-03-14 18:29:54
+# Last modified: 2017-03-15 16:16:07
 #
 cmake_minimum_required(VERSION 2.8)
 
@@ -35,6 +35,7 @@ set(SRC_LIST
    srcs/timer.cpp
    srcs/scripts-manager.cpp
    srcs/socket-ipc.cpp
+   srcs/cfg-loader.cpp
 )
 
 add_executable(nlp-correlation ${SRC_LIST})

@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.cpp
  * Created Time: 2016-12-15 22:09:28
- * Last modified: 2017-03-14 14:32:10
+ * Last modified: 2017-03-15 16:24:10
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -34,13 +34,34 @@ DicParser *DicParser::get_instance(DicParser *ptr)
     if(nullptr != ptr) instance = ptr; return instance;
 }
 
-DicParser::DicParser()
+DicParser::DicParser(string path)
 {
+    if(false == path.empty()){
+
+        this->m_cfg_path = path;
+
+        this->m_xml_cfg = new CfgLoader(path);
+        if(nullptr == this->m_xml_cfg){
+            cout << "[Error] new CfgLoader() failed !" << endl;
+        }
+    }else{
+        this->m_xml_cfg = new CfgLoader();
+        if(nullptr == this->m_xml_cfg){
+            cout << "[Error] new CfgLoader() failed !" << endl;
+        }
+    }
 }
 
 DicParser::~DicParser()
 {
     this->uninit();
+
+    if(nullptr != this->m_xml_cfg){
+        this->m_xml_cfg->kill_thread();
+
+        delete this->m_xml_cfg;
+        this->m_xml_cfg = nullptr;
+    }
 }
 
 int  DicParser::dicparser_main(int argc, char **argv)
@@ -575,4 +596,5 @@ int  DicParser::later_stage_spell(int argc, char **argv)
 
 DiskDic         *DicParser::get_disk(void){ return this->m_disk; }
 Statistics      *DicParser::get_statistics(void){ return this->m_stati; }
+CfgLoader       *DicParser::get_xml_cfg(void){ return this->m_xml_cfg; }
 

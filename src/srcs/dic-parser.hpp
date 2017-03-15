@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.hpp
  * Created Time: 2016-12-15 22:09:32
- * Last modified: 2017-03-06 21:34:57
+ * Last modified: 2017-03-15 16:23:53
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -11,18 +11,20 @@
 #include <string>
 #include "disk-dic.hpp"
 #include "statistics.hpp"
+#include "cfg-loader.hpp"
 
 using std::string;
 
 class DicParser{
 public:
-    DicParser();
+    DicParser(string path = "");
     ~DicParser();
     int  dicparser_main(int argc, char **argv);
 public:
     static DicParser*get_instance(DicParser *ptr = nullptr);
     DiskDic         *get_disk(void);
     Statistics      *get_statistics(void);
+    CfgLoader       *get_xml_cfg(void);
 private:
     int  init(int argc, char **argv);
     int  uninit(void);
@@ -39,9 +41,11 @@ private:
     int  later_stage_spell(int argc, char **argv);
 private:
     static DicParser *instance;
-    DiskDic    *m_disk = nullptr;
-    Statistics *m_stati= nullptr;
-    string      m_db   = "/home/minphone/corpus.db";
+    string      m_cfg_path;
+    CfgLoader  *m_xml_cfg   = nullptr;
+    DiskDic    *m_disk      = nullptr;
+    Statistics *m_stati     = nullptr;
+    string      m_db        = "/home/minphone/corpus.db";
 };
 
 #endif //_DIC_PARSER_HPP_
