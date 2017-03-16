@@ -1,7 +1,7 @@
 /*
  * Progarm Name: cfg-loader.cpp
  * Created Time: 2017-03-14 18:36:20
- * Last modified: 2017-03-15 15:52:29
+ * Last modified: 2017-03-16 09:07:09
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -33,6 +33,20 @@ CfgLoader::CfgLoader(string cfg_path)
 {
     if(false == cfg_path.empty()){
         this->m_file = cfg_path;
+    }
+
+    /* 
+     * update this->m_file 
+     * eg. ~/cfg/config.xml => /home/minphone/cfg/config.xml
+     * */
+    {
+        string home = getenv("HOME");
+
+        int pos = -1;
+        if((int)string::npos != (pos = this->m_file.find("~"))){
+            string tail(this->m_file, pos + strlen("~"), string::npos);
+            this->m_file = home + tail;
+        }
     }
 
     this->m_check_loop = new thread(&CfgLoader::cfg_file_check, this);
