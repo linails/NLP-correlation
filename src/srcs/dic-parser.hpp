@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.hpp
  * Created Time: 2016-12-15 22:09:32
- * Last modified: 2017-03-15 16:23:53
+ * Last modified: 2017-03-19 23:41:00
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -39,9 +39,11 @@ private:
     int  later_stage_hytycfyccd(int argc, char **argv);
     int  spell_statistic(int argc, char **argv);
     int  later_stage_spell(int argc, char **argv);
+    string addr_translate(string path_ori);
 private:
     static DicParser *instance;
     string      m_cfg_path;
+    string      m_exorigin;
     CfgLoader  *m_xml_cfg   = nullptr;
     DiskDic    *m_disk      = nullptr;
     Statistics *m_stati     = nullptr;

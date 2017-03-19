@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.cpp
  * Created Time: 2016-12-15 22:09:28
- * Last modified: 2017-03-15 16:24:10
+ * Last modified: 2017-03-19 23:42:15
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -50,6 +50,10 @@ DicParser::DicParser(string path)
             cout << "[Error] new CfgLoader() failed !" << endl;
         }
     }
+
+    do{
+        this->m_xml_cfg->getMaster_exorigin_path(this->m_exorigin);
+    }while(true == this->m_exorigin.empty());
 }
 
 DicParser::~DicParser()
@@ -72,7 +76,7 @@ int  DicParser::dicparser_main(int argc, char **argv)
 
     //ret = this->parser_xhzd(argc, argv); assert(-1 != ret);
 
-    //ret = this->parser_xdhycd(argc, argv); assert(-1 != ret);
+    ret = this->parser_xdhycd(argc, argv); assert(-1 != ret);
 
     //ret = this->parser_cycd(argc, argv); assert(-1 != ret);
 
@@ -82,7 +86,7 @@ int  DicParser::dicparser_main(int argc, char **argv)
 
     //ret = this->spell_statistic(argc, argv); assert(-1 != ret);
 
-    ret = this->later_stage_spell(argc, argv); assert(-1 != ret);
+    //ret = this->later_stage_spell(argc, argv); assert(-1 != ret);
 
     return ret;
 }
@@ -114,8 +118,7 @@ int  DicParser::parser_xhzd(int argc, char **argv)
 
     int ret = 0;
 
-    string fn = "/home/minphone/space_sdc/workspace/"
-                "dic_parse/dicparse/src/dic/xhzd.txt";
+    string fn = this->addr_translate(this->m_exorigin + "xhzd.txt");
 
     string dline;
 
@@ -282,8 +285,7 @@ int  DicParser::parser_xdhycd(int argc, char **argv)
 
     int ret = 0;
 
-    string fn = "/home/minphone/space_sdc/workspace/"
-                "dic_parse/dicparse/src/dic/xdhycd.txt";
+    string fn = this->addr_translate(this->m_exorigin + "xdhycd.txt");
 
     string dline;
 
@@ -387,8 +389,7 @@ int  DicParser::parser_cycd(int argc, char **argv)
 
     int ret = 0;
 
-    string fn = "/home/minphone/space_sdc/workspace/"
-                "dic_parse/dicparse/src/dic/cycd.txt";
+    string fn = this->addr_translate(this->m_exorigin + "cycd.txt");
 
     string dline;
 
@@ -493,7 +494,7 @@ int  DicParser::spell_statistic(int argc, char **argv)
 
     cout << "spell_statistic ..." << endl;
 
-    string fn = "/home/minphone/share/exOrigin/log-spell-2";
+    string fn = this->addr_translate(this->m_exorigin + "log-spell-2.txt");
 
     if(1 != argc){
         fn = string(argv[1]);
@@ -547,7 +548,9 @@ int  DicParser::later_stage_spell(int argc, char **argv)
     cout << "later - stage For spell !" << endl;
 
     int ret   = 0;
-    string fn = "/home/minphone/share/exOrigin/log-spell-2";
+
+    string fn = this->addr_translate(this->m_exorigin + "log-spell-2.txt");
+
     FormatLaterStage fls;
 
     if(1 != argc){
@@ -597,4 +600,22 @@ int  DicParser::later_stage_spell(int argc, char **argv)
 DiskDic         *DicParser::get_disk(void){ return this->m_disk; }
 Statistics      *DicParser::get_statistics(void){ return this->m_stati; }
 CfgLoader       *DicParser::get_xml_cfg(void){ return this->m_xml_cfg; }
+
+string DicParser::addr_translate(string path_ori)
+{
+    /* 
+     * update path_ori
+     * eg. ~/cfg/config.xml => /home/minphone/cfg/config.xml
+     * */
+
+    string home = getenv("HOME");
+
+    int pos = -1;
+    if((int)string::npos != (pos = path_ori.find("~"))){
+        string tail(path_ori, pos + strlen("~"), string::npos);
+        path_ori = home + tail;
+    }
+
+    return path_ori;
+}
 
