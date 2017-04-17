@@ -1,7 +1,7 @@
 /*
  * Progarm Name: socket-ipc.cpp
  * Created Time: 2017-03-09 08:54:05
- * Last modified: 2017-04-17 17:25:40
+ * Last modified: 2017-04-17 18:03:18
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -21,8 +21,6 @@ using std::endl;
 
 SocketIPC::SocketIPC()
 {
-    this->register_xml();
-
     this->init_socket();
 
     this->m_listener = new thread(&SocketIPC::listener, this);
@@ -82,34 +80,21 @@ int  SocketIPC::sread(string &s)
     return ret;
 }
 
-int  SocketIPC::register_xml(void)
-{
-    int ret = 0;
-
-    DicParser *pdic = DicParser::get_instance();
-    if(nullptr != pdic){
-
-        CfgLoader *cfg = pdic->get_xml_cfg();
-        if(nullptr != cfg){
-            cfg->register_RootChild("network", "server_port");
-
-            string port;
-            cfg->getRoot_child(port, "network", "server_port");
-            this->m_port = atoi(port.c_str());
-
-            cout << "port = " << this->m_port << endl;
-        }else
-            ret = -1;
-
-    }else
-        ret = -1;
-
-    return ret;
-}
-
 int  SocketIPC::init_socket(void)
 {
     int ret = 0;
+
+    /*
+     * get port from cfg-loader
+     * */
+    DicParser *pdic = DicParser::get_instance();
+    if(nullptr != pdic){
+        CfgLoader *cfg = pdic->get_xml_cfg();
+        if(nullptr != cfg){
+            string ip;
+            cfg->getMaster_ip(ip, this->m_port);
+        }
+    }
 
     /* Step 1 */
     this->m_serv_sock = socket(PF_INET, SOCK_STREAM, 0);

@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.cpp
  * Created Time: 2016-12-15 22:09:28
- * Last modified: 2017-03-19 23:42:15
+ * Last modified: 2017-04-17 17:53:00
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -22,6 +22,7 @@
 #include <cstring>
 #include <cstdio>
 #include "format-later-stage.hpp"
+#include <unistd.h>
 
 using std::cout;
 using std::endl;
@@ -100,6 +101,17 @@ int  DicParser::init(int argc, char **argv)
     if(nullptr == this->m_disk){
         this->m_disk = new DiskDic(this->m_db);
     }
+
+
+    /* 
+     * new SocketIPC
+     * */
+    this->m_ipc = new SocketIPC();
+    if(nullptr == this->m_ipc){
+        cout << "[Error] new SocketIPC() failed !" << endl;
+        exit(1);
+    }
+
     return 0;
 }
 
@@ -108,6 +120,13 @@ int  DicParser::uninit(void)
     if(nullptr != this->m_disk){
         delete this->m_disk;
         this->m_disk = nullptr;
+    }
+
+    if(nullptr != this->m_ipc){
+        this->m_ipc->kill_thread();
+
+        delete this->m_ipc;
+        this->m_ipc = nullptr;
     }
     return 0;
 }
@@ -600,6 +619,7 @@ int  DicParser::later_stage_spell(int argc, char **argv)
 DiskDic         *DicParser::get_disk(void){ return this->m_disk; }
 Statistics      *DicParser::get_statistics(void){ return this->m_stati; }
 CfgLoader       *DicParser::get_xml_cfg(void){ return this->m_xml_cfg; }
+SocketIPC       *DicParser::get_socket_ipc(void){ return this->m_ipc; }
 
 string DicParser::addr_translate(string path_ori)
 {

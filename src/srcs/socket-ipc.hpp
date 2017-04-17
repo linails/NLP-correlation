@@ -1,7 +1,7 @@
 /*
  * Progarm Name: socket-ipc.hpp
  * Created Time: 2017-03-09 08:54:09
- * Last modified: 2017-04-17 17:19:40
+ * Last modified: 2017-04-17 18:00:46
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -30,7 +30,6 @@ public:
     int  sread(string &s);
     int  kill_thread(void);
 private:
-    int  register_xml(void);
     int  init_socket(void);
     int  reader(void);
     int  writer(void);

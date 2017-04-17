@@ -1,7 +1,7 @@
 /*
  * Progarm Name: dic-parser.hpp
  * Created Time: 2016-12-15 22:09:32
- * Last modified: 2017-03-19 23:41:00
+ * Last modified: 2017-04-17 17:29:23
  * @author: minphone.linails linails@foxmail.com 
  */
 
@@ -12,6 +12,7 @@
 #include "disk-dic.hpp"
 #include "statistics.hpp"
 #include "cfg-loader.hpp"
+#include "socket-ipc.hpp"
 
 using std::string;
 
@@ -25,6 +26,7 @@ public:
     DiskDic         *get_disk(void);
     Statistics      *get_statistics(void);
     CfgLoader       *get_xml_cfg(void);
+    SocketIPC       *get_socket_ipc(void);
 private:
     int  init(int argc, char **argv);
     int  uninit(void);
@@ -48,6 +50,7 @@ private:
     DiskDic    *m_disk      = nullptr;
     Statistics *m_stati     = nullptr;
     string      m_db        = "/home/minphone/corpus.db";
+    SocketIPC  *m_ipc       = nullptr;
 };
 
 #endif //_DIC_PARSER_HPP_
